@@ -66,6 +66,7 @@ function displayEmployeeInModal(response) {
     <p class="modal-text">Birthday: ${bd_formated}</p>
   `  // end html literal
   document.getElementsByClassName('modal-info-container')[0].innerHTML = html;
+  displayModal(true);
 }
 
 /*
@@ -75,7 +76,9 @@ function displayEmployeeInModal(response) {
 function createModalElement() {
   let html = `
     <div class="modal">
-      <button type="button" id="modal-close-btn" class="modal-close-btn"><strong>X</strong></button>
+      <button type="button" id="modal-close-btn" class="modal-close-btn" onclick="displayModal(false)">
+        <strong>X</strong>
+      </button>
       <div class="modal-info-container">
 
       </div>
@@ -110,7 +113,6 @@ function handleClickOnCard(event) {
   let seed = event.currentTarget
     .getElementsByTagName('seed')[0].getAttribute('data');
   getSpecificEmployee(seed);
-  displayModal(true);
 }
 
 /*
