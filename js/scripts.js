@@ -1,5 +1,5 @@
 /*
-  get a random employee via randomuser API
+Gget a random employee with http request
     if successful, call function to insert into the gallery
 */
 function getAnotherEmployee() {
@@ -11,8 +11,9 @@ function getAnotherEmployee() {
 }
 
 /*
-  get a random employee via randomuser API
-    if successful, call function to insert into the gallery
+  Get a specific employee with http request
+    parameter seed {string} - seed that will return a specific employee
+    if successful, inserts employee at end of gallery
 */
 function getSpecificEmployee(seed) {
   $.ajax({
@@ -24,7 +25,7 @@ function getSpecificEmployee(seed) {
 
 /*
   Create the html for an employee and insert into galley element
-  parameter {http response} response
+    parameter response {http response} - http response containing an employee
 */
 function displayEmployeeInGallery(response) {
   let e = response.results[0];
@@ -47,8 +48,8 @@ function displayEmployeeInGallery(response) {
 }
 
 /*
-  Create the html for an employee and insert into modal element
-  parameter {http response} response
+  Create the html for an employee and insert into modal
+    parameter response {http response} - http response containing an employee
 */
 function displayEmployeeInModal(response) {
   let e = response.results[0];
@@ -69,7 +70,7 @@ function displayEmployeeInModal(response) {
 
 /*
   Create an modal getElement
-    element is hidden and does not have data
+    element is hidden and does not have employee data
 */
 function createModalElement() {
   let html = `
@@ -92,24 +93,32 @@ function createModalElement() {
   document.getElementsByTagName('body')[0].appendChild(d);
 }
 
+/*
+  Display or hide modal
+    parameter show_modal {boolean} - true to display modal, false to hide it
+*/
 function displayModal(show_modal) {
   let val = show_modal ? '' : 'none';
   document.getElementsByClassName('modal-container')[0].style.display = val;
 }
 
+/*
+  Handle click on a card and display the employee in the modal
+    parameter event {click event}
+*/
 function handleClickOnCard(event) {
-  let seed = event.currentTarget.getElementsByTagName('seed')[0].getAttribute('data');
-  console.log("Click on " + seed);
+  let seed = event.currentTarget
+    .getElementsByTagName('seed')[0].getAttribute('data');
   getSpecificEmployee(seed);
   displayModal(true);
 }
 
 /*
-  Code at page load
+  Code when page loads
 */
 createModalElement();
 
-// Display all employees
+// Display the employees
 for (i = 1; i <= 12; i++) {
   getAnotherEmployee();
 }
