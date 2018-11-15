@@ -22,21 +22,6 @@ function getSpecificEmployee(seed) {
   .success(displayEmployeeInModal);
 }
 
-function createModalData(data) {
-  return {
-    picture: data.picture.thumbnail,
-    first_name: data.name.first,
-    last_name: data.name.last,
-    email: data.email,
-    phone: data.phone,
-    street: data.location.street,
-    city: data.location.city,
-    state: data.location.state,
-    postcode: data.postcode,
-    birthday: data.dob.date
-  }
-}
-
 /*
   Create the html for an employee and insert into galley element
   parameter {http response} response
@@ -52,10 +37,11 @@ function displayEmployeeInGallery(response) {
       <p class="card-text">${e.email}</p>
       <p class="card-text cap">${e.location.city}, ${e.location.state}</p>
     </div>
-    <seed style="display: none;">${response.info.seed}</seed>
+    <seed data=${response.info.seed}></seed>
   `  // end html literal
   let d = document.createElement('div');
   d.className = 'card';
+  d.onclick = handleClickOnCard;
   d.innerHTML = html;
   document.getElementById("gallery").appendChild(d);
 }
@@ -108,18 +94,22 @@ function createModalElement() {
 
 function displayModal(show_modal) {
   let val = show_modal ? '' : 'none';
-  document.getElementsByClassName('modal-container')[0].style.display= val;
+  document.getElementsByClassName('modal-container')[0].style.display = val;
+}
+
+function handleClickOnCard(event) {
+  let seed = event.currentTarget.getElementsByTagName('seed')[0].getAttribute('data');
+  console.log("Click on " + seed);
+  getSpecificEmployee(seed);
+  displayModal(true);
 }
 
 /*
-  Create and hide the modal
+  Code at page load
 */
 createModalElement();
-//displayModal(false);
 
-/*
-  Display all employees
-*/
+// Display all employees
 for (i = 1; i <= 12; i++) {
   getAnotherEmployee();
 }
