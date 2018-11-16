@@ -121,8 +121,12 @@ function createModalElement() {
 
 function handleSearchSubmit(event) {
   event.preventDefault();
-  let searchTerm = document.getElementById('search-input').value;
-  console.log('search submitted ' + searchTerm);
+  let searchTerm = $('#search-input').val().toLowerCase();
+  $('.card').each(
+    function(card) {
+      $(this).find('#name').text().includes(searchTerm) ? $(this).show() : $(this).hide();
+    }
+  );  // end each()
 }
 
 /*
@@ -130,8 +134,7 @@ function handleSearchSubmit(event) {
     parameter show_modal {boolean} - true to display modal, false to hide it
 */
 function displayModal(show_modal) {
-  let val = show_modal ? '' : 'none';
-  document.getElementsByClassName('modal-container')[0].style.display = val;
+  show_modal ? $('.modal-container').show() : $('.modal-container').hide();
 }
 
 /*
