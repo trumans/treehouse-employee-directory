@@ -1,10 +1,13 @@
+
+var ApiRootUrl = 'https://randomuser.me/api/?nat=AU,CA,GB,IE,NZ,US';
+
 /*
-Gget a random employee with http request
+  Get a random employee with http request
     if successful, call function to insert into the gallery
 */
 function getAnotherEmployee() {
   $.ajax({
-    url: 'https://randomuser.me/api/',
+    url: ApiRootUrl,
     dataType: 'json'
   })
   .success(displayEmployeeInGallery);
@@ -12,12 +15,12 @@ function getAnotherEmployee() {
 
 /*
   Get a specific employee with http request
-    parameter seed {string} - seed that will return a specific employee
+    parameter seed {string} - seed that will return the employee
     if successful, inserts employee at end of gallery
 */
 function getSpecificEmployee(seed) {
   $.ajax({
-    url: 'https://randomuser.me/api/?seed=' + seed,
+    url: ApiRootUrl + '&seed=' + seed,
     dataType: 'json'
   })
   .success(displayEmployeeInModal);
@@ -29,21 +32,22 @@ function getSpecificEmployee(seed) {
 */
 function displayEmployeeInGallery(response) {
   let e = response.results[0];
-  let html = `
+  let name = e.name;
+  let loc = e.location;
+  let d = document.createElement('div');
+  d.className = 'card';
+  d.onclick = handleClickOnCard;
+  d.innerHTML = `
     <div class="card-img-container">
       <img class="card-img" src="${e.picture.thumbnail}" alt="profile picture">
     </div>
     <div class="card-info-container">
-      <h3 id="name" class="card-name cap">${e.name.first} ${e.name.last}</h3>
+      <h3 id="name" class="card-name cap">${name.first} ${name.last}</h3>
       <p class="card-text">${e.email}</p>
-      <p class="card-text cap">${e.location.city}, ${e.location.state}</p>
+      <p class="card-text cap">${loc.city}, ${loc.state}</p>
     </div>
     <seed data=${response.info.seed}></seed>
-  `  // end html literal
-  let d = document.createElement('div');
-  d.className = 'card';
-  d.onclick = handleClickOnCard;
-  d.innerHTML = html;
+  `;  // end html literal
   document.getElementById("gallery").appendChild(d);
 }
 
@@ -53,20 +57,40 @@ function displayEmployeeInGallery(response) {
 */
 function displayEmployeeInModal(response) {
   let e = response.results[0];
+  let name = e.name;
+  let loc = e.location;
   let bd = new Date(e.dob.date);
   let bd_formated = bd.getMonth() + '/' + bd.getDate() + '/' + bd.getFullYear();
-  let html = `
+  document.getElementsByClassName('modal-info-container')[0].innerHTML = `
     <img class="modal-img" src="${e.picture.medium}" alt="profile picture">
-    <h3 id="name" class="modal-name cap">${e.name.first} ${e.name.last}</h3>
+    <h3 id="name" class="modal-name cap">${name.first} ${name.last}</h3>
     <p class="modal-text">${e.email}</p>
-    <p class="modal-text cap">${e.location.city}</p>
+    <p class="modal-text cap">${loc.city}</p>
     <hr>
     <p class="modal-text">${e.phone}</p>
-    <p class="modal-text">${e.location.street}, ${e.location.city}, ${e.location.state} ${e.location.postcode}</p>
+    <p class="modal-text">${loc.street}, ${loc.city}, ${loc.state} ${loc.postcode}</p>
     <p class="modal-text">Birthday: ${bd_formated}</p>
-  `  // end html literal
-  document.getElementsByClassName('modal-info-container')[0].innerHTML = html;
+  `;  // end html literal
   displayModal(true);
+}
+
+/*
+  Create search element
+*/
+function createSearchElement() {
+  let f = document.createElement('form');
+  let a = document.createAttribute("action");
+  a.value = '#';
+  f.setAttributeNode(a);
+  let m = document.createAttribute("method");
+  m.value = 'get';
+  f.setAttributeNode(m);
+  f.innerHTML = `
+    <input type="search" id="search-input" class="search-input" placeholder="Search...">
+    <input type="submit" value="&#x1F50D;" id="serach-submit" class="search-submit">
+  `;   // end of html literal
+  document.getElementsByClassName('search-container')[0].appendChild(f);
+  document.getElementsByTagName('form')[0].addEventListener('submit', handleSearchSubmit);
 }
 
 /*
@@ -74,7 +98,10 @@ function displayEmployeeInModal(response) {
     element is hidden and does not have employee data
 */
 function createModalElement() {
-  let html = `
+  let d = document.createElement('div');
+  d.className = 'modal-container';
+  d.style.display = 'none';
+  d.innerHTML = `
     <div class="modal">
       <button type="button" id="modal-close-btn" class="modal-close-btn" onclick="displayModal(false)">
         <strong>X</strong>
@@ -88,12 +115,14 @@ function createModalElement() {
       <button type="button" id="modal-prev" class="modal-prev btn">Prev</button>
       <button type="button" id="modal-next" class="modal-next btn">Next</button>
     </div>
-  `  // end html literal
-  let d = document.createElement('div');
-  d.className = 'modal-container';
-  d.style.display = 'none';
-  d.innerHTML = html;
+  `;  // end html literal
   document.getElementsByTagName('body')[0].appendChild(d);
+}
+
+function handleSearchSubmit(event) {
+  event.preventDefault();
+  let searchTerm = document.getElementById('search-input').value;
+  console.log('search submitted ' + searchTerm);
 }
 
 /*
@@ -118,8 +147,8 @@ function handleClickOnCard(event) {
 /*
   Code when page loads
 */
+createSearchElement();
 createModalElement();
-
 // Display the employees
 for (i = 1; i <= 12; i++) {
   getAnotherEmployee();
