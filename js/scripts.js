@@ -1,5 +1,6 @@
 
-var apiRootUrl = 'https://randomuser.me/api/?nat=AU,CA,GB,IE,NZ,US';
+var apiRootUrl =
+  'https://randomuser.me/api/?nat=AU,CA,CH,DE,DK,ES,FI,FR,GB,IE,NO,NL,NZ,TR,US';
 var employeeCount = '12';
 var employees;  // the employees returned by the API
 
