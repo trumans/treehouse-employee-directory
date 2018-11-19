@@ -20,7 +20,7 @@ using an asynchronous http get request with AJAX.
 
 - The 'additional information modal' is an overlay that covers the entire page
 and is semi-transparent except for the box containing the selected employee's
-information, resulting in user interaction is restricted to the buttons on the
+information, resulting in user interaction being restricted to the buttons on the
 modal box.
 
 - The JS script creates html for each employee card and inserts it into a gallery
