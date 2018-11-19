@@ -1,7 +1,7 @@
 
-Treehouse Unit 5 project - employee directory app using public API
+Treehouse Project 5 - Public API Requests - Employee Directory Webpage
 
-Notes regarding extra credit are at the bottom.
+Notes regarding extra credit are at the bottom of this document
 
 Basic Functionality:
 - Launching the application displays a list of 'employees'.
@@ -39,6 +39,9 @@ The following features relate to extra credit
 
 - Employees can be filtered by name using the search box in the upper right
 corner.
+
+- The API call that retrieves employees includes nationalities that use the
+English alphabet but might include accent marks.
 
 - The modal overlay has a Previous and Next button which display the adjacent
 visible employee in the gallery (i.e. filter-sensitive). A button is disabled
